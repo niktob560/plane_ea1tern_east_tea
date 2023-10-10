@@ -56,18 +56,20 @@ class PersonaRepo:
         return PersonResponse.from_request(_id, req)
 
     @staticmethod
-    def patch(_id: int, req: PersonRequest) -> PersonResponse:
+    def patch(_id: int, req_dat: dict) -> PersonResponse:
         with db_conn() as db:
             with db.cursor() as cur:
                 cur.execute('SELECT 1 FROM persons WHERE id=%s;', (_id,))
                 if cur.fetchone() is None:
                     raise ErrorNotFound()
-                cur.execute('UPDATE persons '
-                            'SET    name=%s, '
-                            '       age=%s, '
-                            '       addr=%s, '
-                            '       work_name=%s '
-                            'WHERE  id=%s;',
-                            (req.name, req.age, req.address, req.work, _id))
+                for k, v in req_dat.items():
+                    if k == 'address':
+                        k = 'addr'
+                    if k == 'work':
+                        k = 'work_name'
+                    cur.execute('UPDATE persons '
+                                f'SET    {k}=%s '
+                                'WHERE  id=%s;',
+                                (v, _id))
             db.commit()
-        return PersonResponse.from_request(_id, req)
+        return PersonaRepo.find_by_id(_id)

@@ -29,8 +29,8 @@ async def post_persons(request: web.Request):
 @routes.patch('/persons/{id}')
 async def patch_persons(request: web.Request):
     dat = await request.json()
-    person_id = request.match_info['id']
-    return PersonaRepo.patch(person_id, PersonRequest.from_raw(dat))
+    person_id = int(request.match_info['id'])
+    return PersonaRepo.patch(person_id, dat)
 
 
 @routes.delete('/persons/{id}')
