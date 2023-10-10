@@ -10,13 +10,13 @@ class PersonaRepo:
     def find_by_id(_id: int) -> PersonResponse:
         with db_conn() as db:
             with db.cursor() as cur:
-                cur.execute('SELECT name, age, addr, work_name '
+                cur.execute('SELECT id, name, age, addr, work_name '
                             'FROM persons '
                             'WHERE id=%s;', (_id,))
                 dat = cur.fetchone()
         if dat is None:
             raise ErrorResponse(f'Person not found with id {_id}')
-        return PersonResponse(_id, *dat)
+        return PersonResponse(*dat)
 
     @staticmethod
     def find() -> List[PersonResponse]:
