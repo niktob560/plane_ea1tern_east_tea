@@ -58,3 +58,4 @@ jobs:
           user_column: 'D'
           column_offset: 'F'
           mark: "'+"
+        continue-on-error: true
