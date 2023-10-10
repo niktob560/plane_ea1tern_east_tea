@@ -30,6 +30,13 @@ jobs:
         run: |
             pytest -vs .
 
+      - name: deploy
+        uses: ttskch/render-deploy@v1.0.0
+        with:
+          api-key: ${{ secrets.RENDER_API_KEY }}
+          service-id: ${{ secrets.RENDER_SERVICE_ID }}
+          timeout: 300 # optional
+
       - name: Run API Tests
         uses: matt-ball/newman-action@master
         with:
@@ -51,12 +58,3 @@ jobs:
           user_column: 'D'
           column_offset: 'F'
           mark: "'+"
-
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: ttskch/render-deploy@v1.0.0
-        with:
-          api-key: ${{ secrets.RENDER_API_KEY }}
-          service-id: ${{ secrets.RENDER_SERVICE_ID }}
-          timeout: 300 # optional
